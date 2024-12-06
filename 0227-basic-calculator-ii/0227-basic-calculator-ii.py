@@ -1,55 +1,31 @@
 class Solution:
     def calculate(self, s: str) -> int:
-        # Helper function to perform operations
-        def operate(a, b, op):
-            if op == "*":
-                return a * b
-            elif op == "/":
-                return a // b
-
-        # Clean the input and parse numbers and operators
-        s = s.replace(" ", "")
-        num_stack = []
-        op_stack = []
-        i = 0
-        n = len(s)
-
-        while i < n:
-            if s[i].isdigit():
-                # Handle multi-digit numbers
+        # Initialize variables
+        stack = []
+        num = 0
+        sign = '+'  # Start with a '+' sign by default
+        
+        # Iterate through the string
+        for i, char in enumerate(s):
+            if char.isdigit():
+                num = num * 10 + int(char)  # Handle multi-digit numbers
+            
+            # If the character is an operator or we're at the end of the string
+            if char in "+-*/" or i == len(s) - 1:
+                if sign == '+':
+                    stack.append(num)
+                elif sign == '-':
+                    stack.append(-num)
+                elif sign == '*':
+                    stack.append(stack.pop() * num)
+                elif sign == '/':
+                    stack.append(int(stack.pop() / num))  # Truncate towards zero
+                # Update the sign and reset the number
+                sign = char
                 num = 0
-                while i < n and s[i].isdigit():
-                    num = num * 10 + int(s[i])
-                    i += 1
-                num_stack.append(num)
-                continue
-            elif s[i] in "*/":
-                # Handle multiplication and division immediately
-                op = s[i]
-                i += 1
-                while i < n and s[i] == " ":
-                    i += 1
-                num = 0
-                while i < n and s[i].isdigit():
-                    num = num * 10 + int(s[i])
-                    i += 1
-                # Pop the last number and calculate
-                prev_num = num_stack.pop()
-                num_stack.append(operate(prev_num, num, op))
-                continue
-            else:
-                # Handle addition and subtraction later
-                op_stack.append(s[i])
-            i += 1
+        
+        # Return the sum of the stack
+        return sum(stack)
 
-        # Handle addition and subtraction
-        result = num_stack[0]
-        j = 1
-        for op in op_stack:
-            if op == "+":
-                result += num_stack[j]
-            elif op == "-":
-                result -= num_stack[j]
-            j += 1
-
-        return result
+#time: O(n)
+#space: O(n)
