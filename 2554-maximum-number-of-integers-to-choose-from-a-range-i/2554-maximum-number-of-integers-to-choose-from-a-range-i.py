@@ -20,5 +20,7 @@ class Solution:
                 break
         
         return count
-        
-        
+
+        # Time Complexity O(n + m)
+        # Space Complexity O(m)
+        # n: length of the range, m: length of the banned list.
