@@ -1,21 +1,21 @@
 class Solution:
     def maxSatisfied(self, customers: List[int], grumpy: List[int], minutes: int) -> int:
         left = 0
-        right = left + minutes - 1  # Ensure the window size is exactly `minutes`
+        right = left + minutes - 1 
         satisfied = 0
         current_satisfied = 0
 
         # Add always satisfied customers (where grumpy is 0)
         satisfied = sum(customers[i] for i in range(len(customers)) if grumpy[i] == 0)
 
-        # Initial calculation for the first window, excluding customers already in `satisfied`
+        # In the window only counts the grumpy people to avoid double counts.
         for i in range(left, right + 1):
             if grumpy[i] == 1:
                 current_satisfied += customers[i]
 
         max_additional_satisfied = current_satisfied
 
-        # Slide the window across the array
+        # Slide the window across the array, only counts the customers when owner is grumpy.
         while right < len(customers) - 1:
             # Move the window forward
             left += 1
@@ -33,3 +33,5 @@ class Solution:
 
         return satisfied + max_additional_satisfied
         
+        # Time O(n)
+        # Space O(1)
