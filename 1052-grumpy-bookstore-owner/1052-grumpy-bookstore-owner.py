@@ -5,12 +5,13 @@ class Solution:
         satisfied = 0
         current_satisfied = 0
 
-        # Initial calculation for the first window
-        for i in range(left, right + 1):
-            current_satisfied += customers[i] if grumpy[i] == 1 else 0
-
         # Add always satisfied customers (where grumpy is 0)
         satisfied = sum(customers[i] for i in range(len(customers)) if grumpy[i] == 0)
+
+        # Initial calculation for the first window, excluding customers already in `satisfied`
+        for i in range(left, right + 1):
+            if grumpy[i] == 1:
+                current_satisfied += customers[i]
 
         max_additional_satisfied = current_satisfied
 
@@ -20,10 +21,10 @@ class Solution:
             left += 1
             right += 1
 
-            # Add the new element to the window
+            # Add the new element to the window if the owner is grumpy
             if grumpy[right] == 1:
                 current_satisfied += customers[right]
-            # Remove the element that is sliding out of the window
+            # Remove the element that is sliding out of the window if the owner was grumpy
             if grumpy[left - 1] == 1:
                 current_satisfied -= customers[left - 1]
 
