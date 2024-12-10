@@ -3,31 +3,18 @@ class Solution:
         # Create a stack of each command from path
         # If it is command append to the front of the result.
         
-        paths = []
-        i = 0
-
-        #create paths list, get rid of "/"s 
-        while i < len(path):
-            if path[i] == "/":
-                i += 1
-            else:
-                cur = ""
-                while i < len(path) and path[i] != "/":
-                    cur = cur + path[i]
-                    i += 1
-                paths.append(cur)
-    
+         # Split the path by "/" and process each part
+        paths = path.split("/")
 
         stack = []
         for directory in paths:
-            if directory == ".":
+            if directory == "" or directory == ".":  # Skip empty or current directory
                 continue
             elif directory == "..":
-                if stack: # there is more directories
+                if stack:  # Go up one directory if possible
                     stack.pop()
             else:
                 stack.append(directory)
-
         
          # Construct the simplified path
         res = "/" + "/".join(stack)
