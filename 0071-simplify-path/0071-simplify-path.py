@@ -6,7 +6,7 @@ class Solution:
         paths = []
         i = 0
 
-        #create paths list, get rid of "/"s
+        #create paths list, get rid of "/"s 
         while i < len(path):
             if path[i] == "/":
                 i += 1
@@ -19,14 +19,14 @@ class Solution:
     
 
         stack = []
-        for command in paths:
-            if command == ".":
+        for directory in paths:
+            if directory == ".":
                 continue
-            elif command == "..":
-                if stack: # there is more commands
+            elif directory == "..":
+                if stack: # there is more directories
                     stack.pop()
             else:
-                stack.append(command)
+                stack.append(directory)
 
         
          # Construct the simplified path
