@@ -6,27 +6,26 @@
 #         self.right = right
 class Solution:
     def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
-        result = []
+        to_delete_set = set(to_delete)
+        res = []
         
-        def dfs(parent: Optional[TreeNode], node: Optional[TreeNode]):
-            nonlocal result
+        def dfs(node, is_root):
             if not node:
-                return
-            if node.val in to_delete:
-                if parent:
-                    if parent.left == node:
-                        parent.left = None
-                    else:
-                        parent.right = None
-                dfs(None, node.left)
-                dfs(None, node.right)
-            else:
-                if not parent:
-                    result.append(node)
-                dfs(node, node.left)
-                dfs(node, node.right)
+                return None
+            
+            # Determine if the current node is a root of a subtree
+            root_deleted = node.val in to_delete_set
+            if is_root and not root_deleted:
+                res.append(node)
+            
+            # Recursively process children
+            node.left = dfs(node.left, root_deleted)
+            node.right = dfs(node.right, root_deleted)
+            
+            # Return None if the node is deleted, otherwise return the node
+            return None if root_deleted else node
         
-        dfs(None, root)
-        return result
+        dfs(root, True)
+        return res
 
 
