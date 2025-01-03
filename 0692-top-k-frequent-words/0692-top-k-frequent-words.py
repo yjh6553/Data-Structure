@@ -5,9 +5,7 @@ class Solution:
         res = []
         for key in counts.keys():
             max_heap.append((-counts[key], key))
-    
         heapq.heapify(max_heap)
-
         for _ in range(k):
             res.append(heapq.heappop(max_heap)[1])
 
