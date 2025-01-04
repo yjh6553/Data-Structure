@@ -1,21 +1,28 @@
+class MyString:
+    def __init__(self, word):
+        self.word = word
+
+    def __lt__(self, other):
+        return self.word > other.word
+
 class Solution:
     def topKFrequent(self, words: List[str], k: int) -> List[str]:
-        counts = Counter(words) 
-        """
-        {i : 2, 
-        love : 2, 
-        leetcode: 1, 
-        coding : 1}
+        # Count word frequencies
+        count = Counter(words)
 
-        """
+        # Use a min-heap to keep the top k elements
         min_heap = []
-        res = []
+        for word, freq in count.items():
+            # Push into the heap with frequency to simulate max-heap
+            heapq.heappush(min_heap, (freq, MyString(word)))
+            # Maintain the heap size to k
+            if len(min_heap) > k:
+                heapq.heappop(min_heap)
 
-        for key in counts.keys():
-            heapq.heappush(min_heap, (-counts[key], key))
-            # min_heap.heappop()
+        # Extract elements from the heap and sort them
+        result = []
+        while min_heap:
+            result.append(heapq.heappop(min_heap)[1].word)  # Append words only
 
-        for _ in range(k):
-            res.append(heapq.heappop(min_heap)[1])
-
-        return res
+        # The result should be reversed since heap order is smallest first
+        return result[::-1]
