@@ -1,5 +1,7 @@
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
+        # Kadane's Algorithms
+        
         if len(nums) == 1:
             return nums[0]
 
