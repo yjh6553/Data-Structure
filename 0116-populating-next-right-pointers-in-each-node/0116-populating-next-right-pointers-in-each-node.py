@@ -30,6 +30,6 @@ class Solution:
                         q.append(node.left)
                     if node.right:
                         q.append(node.right)
-            if prev:
-                prev.next = None
+            
+            prev.next = None
         return root
