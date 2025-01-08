@@ -33,7 +33,6 @@ class SnapshotArray:
         # If we found a valid snapshot, return the corresponding value
         return changes[best_snap] if best_snap != -1 else 0
 
-
 # Your SnapshotArray object will be instantiated and called as such:
 # obj = SnapshotArray(length)
 # obj.set(index,val)
