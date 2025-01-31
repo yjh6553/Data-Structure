@@ -1,38 +1,31 @@
 class SnapshotArray:
 
     def __init__(self, length: int):
-        # Using a list of dictionaries to track changes at specific snapshots
-        self.array = [{} for _ in range(length)]
+        self.array = [[[-1, 0]] for _ in range(length)]  # Each index stores a list of [snap_id, value]
         self.snap_id = 0
 
     def set(self, index: int, val: int) -> None:
-        # Store the value along with the current snapshot ID
-        self.array[index][self.snap_id] = val
+        self.array[index].append([self.snap_id, val])
 
     def snap(self) -> int:
-        # Increment the snapshot ID and return the previous one
         self.snap_id += 1
         return self.snap_id - 1
 
     def get(self, index: int, snap_id: int) -> int:
-        # Get the history of changes for the given index
-        changes = self.array[index]
-        keys = sorted(changes.keys())
-        
-        # Binary search to find the largest snapshot ID <= given snap_id
-        l, r = 0, len(keys) - 1
-        best_snap = -1
+        # Manual binary search to find the largest snap_id <= the given snap_id
+        history = self.array[index]
+        l, r = 0, len(history) - 1
         while l <= r:
             m = (l + r) // 2
-            if keys[m] <= snap_id:
-                best_snap = keys[m]
-                l = m + 1
+            if history[m][0] <= snap_id:
+                l = m + 1  # Look for a larger snap_id
             else:
-                r = m - 1
+                r = m - 1  # Look for a smaller snap_id
         
-        # If we found a valid snapshot, return the corresponding value
-        return changes[best_snap] if best_snap != -1 else 0
+        # Return the value corresponding to the closest snap_id <= given snap_id
+        return history[r][1]
 
+        
 # Your SnapshotArray object will be instantiated and called as such:
 # obj = SnapshotArray(length)
 # obj.set(index,val)
