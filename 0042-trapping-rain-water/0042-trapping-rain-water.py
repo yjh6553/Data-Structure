@@ -1,7 +1,5 @@
 class Solution:
     def trap(self, height: List[int]) -> int:
-# Check window of each height(up to the heighest point)
-# Need to find the first block and the second block and get the length in between. 
         left = 0
         right = len(height) - 1
         left_max = height[left]
