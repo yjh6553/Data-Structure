@@ -1,34 +1,32 @@
 class Solution:
     def maxTurbulenceSize(self, arr: List[int]) -> int:
-        # Base case: when the condition does not meet.
-        res = 0
+        n = len(arr)
+        if n < 2:
+            return n
 
-        def helper(index: int, version: int, cur: int) -> None:
-            nonlocal res
-            #Base Case
-            if index == len(arr) - 1:
-                return
-            
-            if version == 2: # Second Case
-                if index % 2 == 0 and arr[index] > arr[index + 1]:
-                    cur += 1
-                elif index % 2 != 0 and arr[index] < arr[index + 1]:
-                    cur += 1
-                else:
-                    cur = 0
-                res = max(res, cur)
-                helper(index + 1, version, cur)
-            else: # First Case
-                if index % 2 == 0 and arr[index] < arr[index + 1]:
-                    cur += 1
-                elif index % 2 != 0 and arr[index] > arr[index + 1]:
-                    cur += 1
-                else:
-                    cur = 0
-                res = max(res, cur)
-                helper(index + 1, version, cur)
-            
+        @lru_cache(maxsize=None)
+        def dp(i: int, prev: int) -> int:
+            # Returns the length of the maximum turbulent subarray starting at index i,
+            # given that the difference between arr[i-1] and arr[i] had sign "prev"
+            # (0 means no previous comparison).
+            if i == n - 1:
+                return 1  # Only one element left
 
-        helper(0, 1, 0) # First Ccase
-        helper(0, 2, 0) # Second Case
-        return res + 1
+            diff = arr[i+1] - arr[i]
+            if diff == 0:
+                return 1  # Equal elements break turbulence
+
+            curr_sign = 1 if diff > 0 else -1
+
+            # We can extend the subarray if we're starting fresh (prev == 0)
+            # or if the current difference alternates with the previous sign.
+            if prev == 0 or curr_sign != prev:
+                return 1 + dp(i+1, curr_sign)
+            else:
+                return 1
+
+        best = 1
+        # Consider every possible starting index.
+        for i in range(n):
+            best = max(best, dp(i, 0))
+        return best
