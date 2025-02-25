@@ -1,32 +1,20 @@
 class Solution:
-    def maxTurbulenceSize(self, arr: List[int]) -> int:
+    def maxTurbulenceSize(self, arr):
+        
         n = len(arr)
-        if n < 2:
-            return n
+        l, r = 0, 0
+        ans = 1
 
-        @lru_cache(maxsize=None)
-        def dp(i: int, prev: int) -> int:
-            # Returns the length of the maximum turbulent subarray starting at index i,
-            # given that the difference between arr[i-1] and arr[i] had sign "prev"
-            # (0 means no previous comparison).
-            if i == n - 1:
-                return 1  # Only one element left
+        if n == 1:
+            return 1
 
-            diff = arr[i+1] - arr[i]
-            if diff == 0:
-                return 1  # Equal elements break turbulence
+        while r < n:
+            while l < n - 1 and arr[l] == arr[l+1]: # to handle duplicates
+                l += 1
+            while r < n - 1 and (arr[r-1] > arr[r] < arr[r+1] or arr[r-1] < arr[r] > arr[r+1]):
+                r += 1
+            ans=max(ans, r - l + 1)
+            l = r
+            r += 1
 
-            curr_sign = 1 if diff > 0 else -1
-
-            # We can extend the subarray if we're starting fresh (prev == 0)
-            # or if the current difference alternates with the previous sign.
-            if prev == 0 or curr_sign != prev:
-                return 1 + dp(i+1, curr_sign)
-            else:
-                return 1
-
-        best = 1
-        # Consider every possible starting index.
-        for i in range(n):
-            best = max(best, dp(i, 0))
-        return best
+        return ans
