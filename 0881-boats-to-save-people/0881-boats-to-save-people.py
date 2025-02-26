@@ -6,7 +6,6 @@ class Solution:
         people.sort()
         left, right = 0, len(people) - 1
         res = 0
-        print(people) #[1, 2, 2, 3] Limit: 3
 
         while left <= right: 
             if people[right] == limit:
