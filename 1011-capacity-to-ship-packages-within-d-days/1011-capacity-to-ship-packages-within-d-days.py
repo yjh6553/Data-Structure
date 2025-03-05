@@ -4,7 +4,6 @@ class Solution:
         def check_days(cap: int) -> int:
             res = 0
             i = 0
-            print(cap)
 
             while i < len(weights):
                 cur_total = 0
@@ -12,25 +11,19 @@ class Solution:
                     cur_total += weights[i]
                     i += 1
                 res += 1
-            
-            print(res)
+
             return res
 
         # Binary Search
         temp = 0
         left, right = max(weights), sum(weights)
-        
+
         while left < right:
             mid = (left + right) // 2
             total_days = check_days(mid)
-            if total_days == days:
-                return mid
-            elif total_days < days:
+            if total_days <= days:
                 right = mid
             else:
                 left = mid + 1
-            
-            temp = mid
 
         return left
-
