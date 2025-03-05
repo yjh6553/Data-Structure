@@ -1,37 +1,36 @@
 class Solution:
     def shipWithinDays(self, weights: List[int], days: int) -> int:
-        left = max(weights)
-        right = sum(weights)
+        # Check days
+        def check_days(cap: int) -> int:
+            res = 0
+            i = 0
+            print(cap)
 
-        # Check function
-        def checkCapacity(cap: int) -> bool:
-            current_total = 0
-            current_day = 1
+            while i < len(weights):
+                cur_total = 0
+                while i < len(weights) and cur_total + weights[i] <= cap:
+                    cur_total += weights[i]
+                    i += 1
+                res += 1
+            
+            print(res)
+            return res
 
-            for weight in weights:
-                # If adding the current weight exceeds the capacity
-                if current_total + weight > cap:
-                    current_day += 1  # Move to the next day
-                    current_total = 0  # Reset the total for the new day
-                    if current_day > days:
-                        return False  # If days exceed allowed, return False
-                current_total += weight
-
-            return True
-
-        # Binary search for the minimum capacity
+        # Binary Search
+        temp = 0
+        left, right = max(weights), sum(weights)
+        
         while left < right:
-            cap = (left + right) // 2  # Correct midpoint calculation
-            if checkCapacity(cap):
-                right = cap
+            mid = (left + right) // 2
+            total_days = check_days(mid)
+            if total_days == days:
+                return mid
+            elif total_days < days:
+                right = mid
             else:
-                left = cap + 1
+                left = mid + 1
+            
+            temp = mid
 
         return left
 
-
-
-
-
-
-            
