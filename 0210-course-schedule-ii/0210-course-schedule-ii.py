@@ -13,6 +13,10 @@ class Solution:
         min_heap = [i for i in range(numCourses) if indegree[i] == 0]
         heapq.heapify(min_heap)
 
+        print(graph)
+        print(indegree)
+        print(min_heap)
+
         res = []
 
         while min_heap:
