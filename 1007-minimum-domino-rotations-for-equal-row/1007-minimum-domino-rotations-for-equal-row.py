@@ -1,11 +1,21 @@
 class Solution:
-    def minDominoRotations(self, A: List[int], B: List[int]) -> int:
-        if len(A) != len(B): return -1
-        same, countA, countB = Counter(), Counter(A), Counter(B)
-        for a, b in zip(A, B):
-            if a == b:
-                same[a] += 1
-        for i in range(1, 7):
-            if countA[i] + countB[i] - same[i] == len(A):
-                return min(countA[i], countB[i]) - same[i]        
-        return -1
+    def minDominoRotations(self, tops: List[int], bottoms: List[int]) -> int:
+        res = float('inf')
+        
+        for val in range(1, 7):
+            top_swaps = bottom_swaps = 0
+            valid = True
+
+            for t, b in zip(tops, bottoms):
+                if t != val and b != val:
+                    valid = False
+                    break
+                if t != val:
+                    top_swaps += 1
+                
+                if b != val:
+                    bottom_swaps += 1
+            if valid:
+                res = min(res, top_swaps, bottom_swaps)
+        
+        return -1 if res == float('inf') else res
