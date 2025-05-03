@@ -21,7 +21,6 @@ class Solution:
             return -1
         
         for candidate in candidates:
-            print(f'Current candidate: {candidate}')
             cur_res = 0
             moveToTop = True
             if tops_counts[candidate] <= bottom_counts[candidate]:
@@ -31,10 +30,8 @@ class Solution:
                 if tops[index] != candidate and bottoms[index] != candidate:
                     return -1
                 elif moveToTop and tops[index] != candidate and bottoms[index] == candidate:
-                    print(f'Candidate moves to top at index {index}')
                     cur_res += 1
                 elif not moveToTop and tops[index] == candidate and bottoms[index] != candidate:
-                    print(f'Candidate moves to bottom at index {index}')
                     cur_res += 1
             
             res = min(res, cur_res)
