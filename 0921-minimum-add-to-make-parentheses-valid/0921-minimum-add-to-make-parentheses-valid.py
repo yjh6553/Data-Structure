@@ -1,15 +1,15 @@
 class Solution:
     def minAddToMakeValid(self, s: str) -> int:
-        opened = 0
-        closed = 0
+        stack = []
         for char in s:
             if char == "(":
-                opened += 1
+                stack.append(char)
             if char == ")":
-                if opened:
-                    opened -= 1
-                else:
-                    closed += 1
+                if len(stack) == 0 or stack[-1] == ")":
+                    stack.append(")")
+                elif stack[-1] == "(":
+                    stack.pop()
+                
         
-        res = opened + closed
-        return res
+        print(stack)
+        return len(stack)
