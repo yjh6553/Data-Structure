@@ -11,14 +11,15 @@ class Solution:
         heapq.heapify(minHeap)
 
         while minHeap:
-            first = minHeap[0]
+            first = minHeap[0] 
             for i in range(first, first + groupSize):
-                if i not in count:
+                if i not in count: 
                     return False
                 count[i] -= 1
                 if count[i] == 0:
-                    if minHeap[0] != i:
-                        return False
                     heapq.heappop(minHeap)
         return True
 
+        # n = len(hand)
+        # Time: O(nlogn)
+        # Space: O(n)
