@@ -22,6 +22,5 @@ class Solution:
                 heapq.heappush(max_heap, (freq, char))
             else:
                 return ""
-            print(res)
         
         return res
