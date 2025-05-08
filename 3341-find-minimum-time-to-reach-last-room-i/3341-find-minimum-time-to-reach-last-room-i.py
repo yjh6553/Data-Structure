@@ -1,37 +1,47 @@
-import heapq
-from typing import List
-
 class Solution:
     def minTimeToReach(self, moveTime: List[List[int]]) -> int:
-        numRows = len(moveTime)
-        numCols = len(moveTime[0])
-        
-        # Priority queue to store (current_time, x, y)
-        minHeap = [(0, 0, 0)]  # Start at (0, 0) with time 0
-        arrivalTime = [[float('inf')] * numCols for _ in range(numRows)]
-        arrivalTime[0][0] = 0
-        
-        # Directions for adjacent rooms (down, up, right, left)
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        neighbors = [(1, 0), (0, 1), (-1, 0), (0, -1)]
+        n, m = len(moveTime) - 1, len(moveTime[0]) - 1
 
-        while minHeap:
-            currentTime, x, y = heapq.heappop(minHeap)
+        pq = [(0, 0, 0)]
+        heapq.heapify(pq)
+    
+        visited = set()
 
-            # If we reached the target room (numRows - 1, numCols - 1)
-            if (x, y) == (numRows - 1, numCols - 1):
-                return currentTime
+        dist = [[float('inf')] * (m + 1) for _ in range(n + 1)]
+        dist[0][0] = 0
 
-            # Explore adjacent rooms
-            for dx, dy in directions:
-                newX, newY = x + dx, y + dy
+        while pq:
+            # print(pq)
+            node = heapq.heappop(pq)
+            time, x, y = node[0], node[1], node[2]
+            if (x, y) == (n, m):
+                return time
 
-                if 0 <= newX < numRows and 0 <= newY < numCols:
-                    waitTime = max(moveTime[newX][newY] - currentTime, 0)
-                    newArrivalTime = currentTime + 1 + waitTime
+            if (x, y) in visited:
+                continue
+            
+            visited.add((x,y))
+            
+            
+            # print(f'start a for loop')
+            for nei in neighbors:
+                new_x = nei[0] + x
+                new_y = nei[1] + y
+                
+                if new_x > n or new_x < 0 or new_y < 0 or new_y > m:
+                    continue
+                dest_time = moveTime[new_x][new_y]
+                
+                # print(f'new_x: {new_x}  new_y: {new_y}  time: {dest_time}')
+                if time >= dest_time:
+                    new_time = time + 1
+                else:
+                    new_time = dest_time + 1
+                
+                if new_time < dist[new_x][new_y]:
+                    dist[new_x][new_y] = new_time
+                    heapq.heappush(pq, (new_time, new_x, new_y))
+            
+        return -1
 
-                    # Only push to the queue if we found a better arrival time
-                    if newArrivalTime < arrivalTime[newX][newY]:
-                        arrivalTime[newX][newY] = newArrivalTime
-                        heapq.heappush(minHeap, (newArrivalTime, newX, newY))
-
-        return -1  # Return -1 if the target room is unreachable
