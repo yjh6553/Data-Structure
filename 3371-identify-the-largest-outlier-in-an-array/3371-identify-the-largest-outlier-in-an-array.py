@@ -1,23 +1,30 @@
 class Solution:
     def getLargestOutlier(self, nums: List[int]) -> int:
-        total_sum = sum(nums)  
-      
-        num_counts = defaultdict(int)
-        for num in nums:
-            num_counts[num] += 1
-        
+        '''
+        total = sum(nums)
+        i = 0
+        possible_answers = []
 
-        largest_outlier = float('-inf')
+        while i <= len(nums) - 1:
+            poss_outlier = int((total - nums[i]) / 2)
+            if poss_outlier in nums:
+                possible_answers.append(nums[i])
+            i += 1
         
- 
-        for num in num_counts.keys():
-          
-            potential_outlier = total_sum - 2 * num  
-            
- 
-            if potential_outlier in num_counts:
-                if potential_outlier != num or num_counts[num] > 1: 
-                    largest_outlier = max(largest_outlier, potential_outlier)
+        return max(possible_answers)
+        '''
+        total = sum(nums)
+        freq = Counter(nums)
+        possible_answers = []
+
+        for num in nums:
+            if (total - num) % 2 == 0:  # must be even
+                poss_outlier = (total - num) // 2
+                # temporarily remove num from freq to avoid self-count
+                freq[num] -= 1
+                if freq[poss_outlier] > 0:
+                    possible_answers.append(num)
+                freq[num] += 1
         
+        return max(possible_answers)
     
-        return largest_outlier
